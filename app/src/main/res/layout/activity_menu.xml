@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.manuel.prototipo_personaemocion.Actividades.Menu">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentLeft="true"
+        android:paddingTop="90dp"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button1"
+            style="@style/btnStyleOrange"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:clickable="true"
+            android:enabled="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button2"
+            android:text="Botón 2"
+            android:layout_below="@+id/button1"
+            android:paddingRight="10dp"
+            style="@style/btnStyleOrange"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:clickable="true"
+            android:enabled="true" />
+    </LinearLayout>
+
+</RelativeLayout>
+

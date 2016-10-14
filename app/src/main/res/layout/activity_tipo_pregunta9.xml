@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.manuel.prototipo_personaemocion.Actividades.Cuestionario">
+
+
+    <ScrollView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/scrollView"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="13dp"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:text="Escribe una palabra clave que define el último concepto que ha despertado tu interés"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="23sp"
+                android:id="@+id/tituloPregunta" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="center"
+                android:layout_marginBottom="25dp"
+                android:id="@+id/entrada" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/aceptar"
+                style="@style/btnStyleBlue"
+                android:layout_below="@+id/entrada"
+                android:text="Aceptar"
+                android:gravity="center"
+                android:layout_marginBottom="18dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:clickable="true"
+                android:enabled="true" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

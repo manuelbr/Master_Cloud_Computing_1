@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#5161BC</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="blanco_puro2">#FDFDFD</color>
+    <color name="turquesa_claro">#AFB7F0</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="material_blue_500">#5677fc</color>
+    <color name="blanco_hueso">#F5F5DC</color>
+    <color name="background">#FFD604</color>
+    <color name="background_2">#FFC113</color>
+    <color name="black_overlay">#66000000</color>
+</resources>

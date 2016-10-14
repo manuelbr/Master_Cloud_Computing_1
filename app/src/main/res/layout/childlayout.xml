@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/blanco_puro2"
+    android:layout_height="?android:attr/listPreferredItemHeight">
+
+    <ImageView
+        android:id="@+id/ivItem"
+        android:layout_width="?android:attr/listPreferredItemHeightLarge"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:layout_alignParentLeft="true"
+        android:contentDescription="@string/app_name"
+        android:paddingTop="3dip"
+        android:paddingBottom="3dip"
+        android:paddingLeft="3dip"
+        />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/ivItem"
+        android:textSize="19sp"
+        android:textIsSelectable="false"
+        android:paddingLeft="9dip"
+        />
+
+    <RelativeLayout
+        android:id="@+id/datos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitle"
+        android:layout_toEndOf="@+id/ivItem"
+        >
+
+            <LinearLayout
+                android:id="@+id/emociones"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:orientation="horizontal"
+                android:paddingLeft="9dip"
+            >
+
+                <ImageView
+                    android:id="@+id/emocion1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                />
+
+                <ImageView
+                    android:id="@+id/emocion2"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                />
+
+                <ImageView
+                    android:id="@+id/emocion3"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                />
+            </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingLeft="13dip"
+            android:id="@+id/directortex"
+            android:layout_below="@+id/emociones"
+            android:text="Director: "
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:id="@+id/director"
+            android:layout_below="@+id/emociones"
+            android:layout_alignBaseline="@id/directortex"
+            android:layout_toRightOf="@id/directortex"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingLeft="13dip"
+            android:id="@+id/notatex"
+            android:layout_below="@+id/directortex"
+            android:text="Nota emocional: "
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:id="@+id/nota"
+            android:layout_below="@+id/directortex"
+            android:layout_alignBaseline="@id/notatex"
+            android:layout_toRightOf="@id/notatex"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:id="@+id/añotex"
+            android:layout_below="@+id/notatex"
+            android:scaleType="centerInside"
+            android:text="Año: "
+            android:layout_toLeftOf="@id/año"
+        />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingRight="13dip"
+            android:id="@+id/año"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/notatex"
+        />
+    </RelativeLayout>
+
+</RelativeLayout>
