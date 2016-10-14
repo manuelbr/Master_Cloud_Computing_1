@@ -25,14 +25,15 @@ Hay que destacar que como producto de cara al consumidor es algo prácticamente 
 
 # Áreas funcionales del proyecto
 El proyecto se encuentra definido gracias a su participación en áreas como:
-	-La psicología.
-	-El mundo del cine.
-	-Las aplicaciones Android.
-	-Las Bases de Datos distribuidas.
-	-Cloud Computing
-	-El análisis psicológico de personas.
-	-Las emociones que definen el estado de los sujetos.
-	-Temas relacionados con la forma de socializar de los humanos.
+	
+-[X] La psicología.
+-[X] El mundo del cine.
+-[X] Las aplicaciones Android.
+-[X] Las Bases de Datos distribuidas.
+-[X] Cloud Computing
+-[X] El análisis psicológico de personas.
+-[X] Las emociones que definen el estado de los sujetos.
+-[X] Temas relacionados con la forma de socializar de los humanos.
 
 #¿Qué es lo que propone el Proyecto?
 La base de la idea que sustenta este trabajo son las emociones que se perciben durante el visionado de una película. Partiendo de este hecho, todas las funciones del software estarán orientadas a facilitar que dichas emociones aparezcan con la frecuencia adecuada, en el momento perfecto. Para ello, se utilizará un diseño e implementación en forma de aplicación Android para su versión 4.4 (Kit Kat), la más utilizada en el momento del comienzo del desarrollo de este proyecto (Octubre de 2015). 
