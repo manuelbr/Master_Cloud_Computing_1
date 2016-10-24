@@ -42,4 +42,8 @@ La funcionalidad de dicha aplicación, tal y como se ha desgranado hasta ahora, 
 
 Cada película contará con una ficha definitoria en la que se podrá observar su sinopsis, su tráiler cinematográfico, los comentarios dejados por los usuarios registrados (así como sus videos) y su poster oficial. 
 
-Para terminar, remarcar que toda esta funcionalidad estará orientada a acercar las experiencias sentidas por una persona cuando “conecta” con un visionado cinematográfico tanto en momento como en experiencia. Es decir, su objetivo es lograr que cuando un sujeto quiera ver una película, disfrute al verla sea cuál sea su situación. La película adecuada para el momento adecuado.  
+Para terminar, remarcar que toda esta funcionalidad estará orientada a acercar las experiencias sentidas por una persona cuando “conecta” con un visionado cinematográfico tanto en momento como en experiencia. Es decir, su objetivo es lograr que cuando un sujeto quiera ver una película, disfrute al verla sea cuál sea su situación. La película adecuada para el momento adecuado.
+
+# Actualizaciones
+
+- [x] Actualización de los objetivos de la segunda y tercera semana (a día 24/10/2016).  
