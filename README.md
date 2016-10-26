@@ -44,6 +44,12 @@ Cada película contará con una ficha definitoria en la que se podrá observar s
 
 Para terminar, remarcar que toda esta funcionalidad estará orientada a acercar las experiencias sentidas por una persona cuando “conecta” con un visionado cinematográfico tanto en momento como en experiencia. Es decir, su objetivo es lograr que cuando un sujeto quiera ver una película, disfrute al verla sea cuál sea su situación. La película adecuada para el momento adecuado.
 
+# ¿Qué arquitectura usará el software?
+
+Será una arquitectura monolítica, ya que por defecto, el proyecto fue pensado así desde el principio, y cambiarlo ahora conllevaría un trabajo demasiado tedioso.
+
 # Actualizaciones
 
 - [x] Actualización de los objetivos de la segunda y tercera semana (a día 24/10/2016).  
+- [x] Añadido del tipo de arquitectura del software (a día 26/10/2016). 
+
