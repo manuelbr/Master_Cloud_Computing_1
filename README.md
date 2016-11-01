@@ -46,10 +46,19 @@ Para terminar, remarcar que toda esta funcionalidad estará orientada a acercar 
 
 # ¿Qué arquitectura usará el software?
 
-Será una arquitectura monolítica, ya que por defecto, el proyecto fue pensado así desde el principio, y cambiarlo ahora conllevaría un trabajo demasiado tedioso.
+El software usará una arquitectura basada en microservicios, según la cuál tendremos varias partes diferenciadas dentro de la aplicación. Por un lado estarán los microservicios que se comunicarán entre sí, a saber:
+	
+- [x] Microservicio de conexión con base de datos de películas en IMDB, a través de una API externa.
+- [x] Microservicio de conexión con una base de datos relacional que contenga las preguntas y la psicología de los cuestionarios emocionales que se realizarán en la aplicación.
+- [x] Microservicio de conexión con un sistema de almacenamiento de archivos, que contenga las imágenes y sonidos que se requieran durante los cuestionarios.
+- [x] Microservicio de conexión con una base de datos relacional, donde poder almacenar y obtener los datos de los usuarios que se registran en la aplicación. 
+
+Todos estos microservicios se llamarán desde un web service escrito en php y alojado en la nube, que hará las veces de controlador entre estos microservicios y el software Android. A su vez, dentro del propio software de la aplicación, la interfaz hará de mediadora entre las conexiones y las 
+operaciones que se realizan con los microservicios y los datos que se mostrarán al usuario. 
 
 # Actualizaciones
 
 - [x] Actualización de los objetivos de la segunda y tercera semana (a día 24/10/2016).  
 - [x] Añadido del tipo de arquitectura del software (a día 26/10/2016). 
+- [x] Modificado el tipo de arquitectura del software, y añadido de los componentes que tendrá (a día 01/11/2016). 
 
