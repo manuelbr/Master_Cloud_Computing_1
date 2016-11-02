@@ -48,17 +48,19 @@ Para terminar, remarcar que toda esta funcionalidad estará orientada a acercar 
 
 El software usará una arquitectura basada en microservicios, según la cuál tendremos varias partes diferenciadas dentro de la aplicación. Por un lado estarán los microservicios que se comunicarán entre sí, a saber:
 	
-- [x] Microservicio de conexión con base de datos de películas en IMDB, a través de una API externa.
-- [x] Microservicio de conexión con una base de datos relacional que contenga las preguntas y la psicología de los cuestionarios emocionales que se realizarán en la aplicación.
-- [x] Microservicio de conexión con un sistema de almacenamiento de archivos, que contenga las imágenes y sonidos que se requieran durante los cuestionarios.
-- [x] Microservicio de conexión con una base de datos relacional, donde poder almacenar y obtener los datos de los usuarios que se registran en la aplicación. 
+- [x] Microservicio de conexión y lectura de datos con una API conectada a la base de datos de películas de IMDB, que devuelva la información de forma tratable por la aplicación.
+- [x] Microservicio de conexión, lectura y modificación con una base de datos relacional que contenga las preguntas que conformarán los cuestionarios emocionales de la aplicación y los datos de los usuarios que se registran.
+- [x] Microservicio de encolado de peticiones de usuario, de cara a tener un orden en cuanto a las peticiones que se realizan a la base de datos.
+- [x] Microservicio de logeo de acciones de usuarios, de cara a poder controlar las actividades que llevan a cabo (tipo: cuestionario realizado, resultado obtenido, etc).
 
-Todos estos microservicios se llamarán desde un web service escrito en php y alojado en la nube, que hará las veces de controlador entre estos microservicios y el software Android. A su vez, dentro del propio software de la aplicación, la interfaz hará de mediadora entre las conexiones y las 
-operaciones que se realizan con los microservicios y los datos que se mostrarán al usuario. 
+Las peticiones de los usuarios se irán almacenando en el microservicio de encolado de peticiones, de donde se irán sacando por el controlador de los
+microservicios, que en función de las peticiones que saque, redirigirá a uno u otro microservicio. Dicho controlador será la puerta de conexión
+entre estos componentes y el software Android de la aplicación.
 
 # Actualizaciones
 
 - [x] Actualización de los objetivos de la segunda y tercera semana (a día 24/10/2016).  
 - [x] Añadido del tipo de arquitectura del software (a día 26/10/2016). 
 - [x] Modificado el tipo de arquitectura del software, y añadido de los componentes que tendrá (a día 01/11/2016). 
+- [x] Actualizados los componentes de la aquitectura (a día 02/11/2016).
 
