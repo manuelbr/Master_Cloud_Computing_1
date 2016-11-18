@@ -58,6 +58,38 @@ entre estos componentes y el software Android de la aplicación.
 
 # Aprovisionamiento de la nube
 
+Para poder desplegar los servicios anteriormente descritos en la nube, será necesario tener una forma
+de aprovisionar rápidamente dicha nube, de cara a tener todas las herramientas necesarias para poder
+desplegar estos servicios.
+
+Como plataforma de despliegue de la imagen necesaria, se ha elegido TryStack: web para 
+usuarios que quieran probar openstack, el servicio cloud de código abierto. La elección de esta 
+herramienta se ha debido principalmente a que no hay que proporcionar números de cuenta bancarios
+ni datos comprometedores. Ello es porque esta plataforma es totalmente gratuita, aunque
+evidentemente cuenta con sus limitaciones: las instancias creadas se destruyen veinticuatro horas
+después de ser creadas, solo permiten tres intancias a la vez, etc.
+
+El sistema de aprovisionamiento elegido es "ansible", ya que es muy sencillo de usar: funciona
+mediante ficheros ".YAML" (playbooks), scripts fáciles de entender a simple vista, ya que se organizan en tareas a realizar: instalar apache, php...etc. Además de ello, ansible no necesita usuario root, utiliza ssh como método de autenticación con uso de claves (sistema  de autenticación facilitado por
+openstack en la creación de sus instancias) y no usa agentes como otros sistemas de aprovisionamiento más complejos de entender.
+
+Por otro lado, en TryStack se ha elegido ubuntu 14.04 como imagen que conformará la máquina virtual
+que usaremos como nube. La principal razón de esta decisión es porque este sistema operativo cuenta
+con Python 2.7 instalado de serie, requisito fundamental para que funcione ansible, ya que aún no
+ha sido actualizado para funcionar con versiones superiores a esa y que sí están instaladas por defecto
+en distribuciones más nuevas de ubuntu.
+
+Las herramientas que están preparadas para instalarse como aprovisionamiento en la máquina dada son las siguientes: 
+
+- [x] Apache2, para poder tener un servidor donde alojar la base de datos relacional y los diversos scripts a utilizar.
+- [x] El módulo Php que requiere Apache2 para poder funcionar.
+- [x] MySql server para poder alojar la base de datos en comunión con Apache2.
+- [x] RabbitMQ para poder tener el microservicio de gestión de colas de peticiones.
+
+Además de ello, en el script se realizan otras tareas como: la configuración del DNS de la máquina host, ya que por defecto openstack no la configura y la puesta en marcha de apache2 una vez instalado.
+
+Una guía detallada de cómo realizar este aprovisionamiento puede visitarse en la rama gh-pages de este
+proyecto, más concretamente [Aquí](https://manuelbr.github.io/Proyecto_CC/).
 
 # Actualizaciones
 
@@ -65,4 +97,6 @@ entre estos componentes y el software Android de la aplicación.
 - [x] Añadido del tipo de arquitectura del software (a día 26/10/2016). 
 - [x] Modificado el tipo de arquitectura del software, y añadido de los componentes que tendrá (a día 01/11/2016). 
 - [x] Actualizados los componentes de la aquitectura (a día 02/11/2016).
+- [x] Actualizados los microservicios a implementar (a día 18/11/2016).
+- [x] Inclusión de la documentación que hace referencia al aprovisionamiento de la nube a usar. (a día 18/11/2016).
 
