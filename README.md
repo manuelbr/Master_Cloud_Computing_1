@@ -51,11 +51,13 @@ El software usará una arquitectura basada en microservicios, según la cuál te
 - [x] Microservicio de conexión y lectura de datos con una API conectada a la base de datos de películas de IMDB, que devuelva la información de forma tratable por la aplicación.
 - [x] Microservicio de conexión, lectura y modificación con una base de datos relacional que contenga las preguntas que conformarán los cuestionarios emocionales de la aplicación y los datos de los usuarios que se registran.
 - [x] Microservicio de encolado de peticiones de usuario, de cara a tener un orden en cuanto a las peticiones que se realizan a la base de datos.
-- [x] Microservicio de logeo de acciones de usuarios, de cara a poder controlar las actividades que llevan a cabo (tipo: cuestionario realizado, resultado obtenido, etc).
 
 Las peticiones de los usuarios se irán almacenando en el microservicio de encolado de peticiones, de donde se irán sacando por el controlador de los
 microservicios, que en función de las peticiones que saque, redirigirá a uno u otro microservicio. Dicho controlador será la puerta de conexión
 entre estos componentes y el software Android de la aplicación.
+
+# Aprovisionamiento de la nube
+
 
 # Actualizaciones
 
