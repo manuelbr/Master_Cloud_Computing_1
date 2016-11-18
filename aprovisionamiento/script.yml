@@ -1,0 +1,54 @@
+---
+- hosts: host1
+  sudo: yes
+  gather_facts: False
+
+  tasks:
+  - name: Preparar archivo de hosts
+    replace: dest=/etc/hosts regexp="127.0.0.1 localhost" replace="127.0.0.1 localhost.localdomain localhost" backup=yes
+
+  - name: Añadir el nuevo nombre de host = ubuntu
+    lineinfile: 
+      dest: /etc/hosts
+      insertbefore: "#" 
+      line: "127.0.1.1 ubuntu" 
+      backup: yes
+
+  - name: Configurar DNS
+    lineinfile: dest=/etc/resolv.conf line="nameserver 8.8.8.8" backup=yes
+
+  - name: Instalar Apache2
+    apt: 
+      update_cache: yes
+      name: apache2 
+      state: present
+
+  - name: Instalar el módulo PHP para Apache2
+    apt: 
+      update_cache: yes
+      name: libapache2-mod-php5 
+      state: present
+
+  - name: Instalar MySql server
+    apt: 
+      name: mysql-server
+      state: present
+
+  - name: Arrancar Apache
+    service: name=apache2 state=running enabled=yes
+  
+  - name: Añadir repositorios de rabbitMQ
+    apt_repository: repo='deb http://www.rabbitmq.com/debian/ testing main' state=present
+
+  - name: Añadir autentificación de los repositorios
+    apt_key: url=https://www.rabbitmq.com/rabbitmq-signing-key-public.asc state=present
+
+  - name: Actualizar los repositorios
+    apt: update_cache=yes
+
+  - name: Instalar RabbitMQ
+    apt: 
+      name: rabbitmq-server 
+      update_cache: yes
+      force: yes 
+      state: present
