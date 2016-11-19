@@ -72,8 +72,8 @@ siguiente orden:</p>
 <p>Los recursos necesarios para realizar con éxito este comando son los siguientes:</p>
 
 <ul>
-	<li><a href="https://github.com/manuelbr/Proyecto_CC/tree/master/aprovisionamiento/script.yml">Script de aprovisionamiento</a></li>
-	<li><a href="https://github.com/manuelbr/Proyecto_CC/tree/master/aprovisionamiento/key.pem">Clave privada de acceso a la nube</a></li>
+	<li><a href="https://github.com/manuelbr/Proyecto_CC/tree/master/provision/script.yml">Script de aprovisionamiento</a></li>
+	<li><a href="https://github.com/manuelbr/Proyecto_CC/tree/master/provision/key.pem">Clave privada de acceso a la nube</a></li>
 </ul>
 
 <p>De cara a probar el fichero de aprovisionamiento, se proporciona la ip actual a utilizar como host de ansible: 8.43.87.66. Dado que las máquinas son eliminadas por TryStack veinticuatro horas después de su creación, lo mismo les ocurre a las ip flotantes que tienen asignadas. Por ello, ansible debe ser configurado cuando se vuelve a crear una nueva instancia con una nueva ip, sustituyéndola por la anterior que se encuentra en el fichero: /etc/ansible/hosts, asociada al host que define a la instancia. En caso de que cuando se pruebe este fichero de aprovisionamiento ansible de avisos de que el host es 
