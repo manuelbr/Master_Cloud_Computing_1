@@ -1,7 +1,7 @@
 ##Correcciones del script de Manuel Blanco Rienda 
 
-Nombre del alumno:
+##Nombre del alumno:
 
-Errores encontrados:
+##Errores encontrados:
 
-Opinión:
+##Opinión:
