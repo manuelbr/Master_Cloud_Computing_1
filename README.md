@@ -47,11 +47,48 @@ Las herramientas que están preparadas para instalarse como aprovisionamiento en
 - [x] El módulo Php que requiere Apache2 para poder funcionar.
 - [x] MySql server para poder alojar la base de datos en comunión con Apache2.
 - [x] RabbitMQ para poder tener el microservicio de gestión de colas de peticiones.
+- [x] GitHub para la gestión de versiones del proyecto.
 
 Además de ello, en el script se realizan otras tareas como: la configuración del DNS de la máquina host, ya que por defecto openstack no la configura y la puesta en marcha de apache2 una vez instalado.
 
 Una guía detallada de cómo realizar este aprovisionamiento puede visitarse en la rama gh-pages de este
 proyecto, más concretamente [Aquí](https://manuelbr.github.io/Proyecto_CC/).
+
+##Guia de instalación y funcionamiento de ansible con la máquina virtual
+        
+Lo primero de todo es la instalación de ansible en local, por ejemplo usando apt-get en ubuntu con la siguiente lista de órdenes:
+
+* $ sudo apt-get install software-properties-common
+* $ sudo apt-add-repository ppa:ansible/ansible
+* $ sudo apt-get update
+* $ sudo apt-get install ansible
+
+
+Ahora, es el momento de configurarlo modificando el archivo /etc/ansible/hosts y añadiendo al final
+el nombre del grupo de host a definir y las direcciones ip que lo definirán, junto con sus nombres. Como ejemplo se puede tomar
+las siguientes líneas:
+
+
+* [hosts]
+* host1 ansible_ssh_host=ip_maquina_a_proviosionar
+
+ 
+Tras ésto, se debe crear una carpeta llamada "group_vars" que contenga un único archivo que se llame como el grupo que se ha definido en el archivo hosts anterior (el nombre asignado al grupo de hosts en el fichero descrito anteriormente), que contenga
+las siguientes líneas:
+
+
+* ---
+* ansible_ssh_user: nombre_maquina_a_provisionar
+ 
+El significado de estas dos líneas es decidir el nombre de usuario que utilizará ssh para autenticarse
+dentro del host establecido. Ahora, ya se puede ejecutar el script en la máquina host con la
+siguiente orden:
+
+* ansible-playbook -i (Directorio donde está el fichero hosts: /etc/ansible/hosts) (Directorio donde se encuentre el script.yml) --private-key (Directorio donde se encuentre el archivo ".pem" con la clave privada a utilizar en la autenticación via ssh)
+
+A continuación se proporciona el script necesario para realizar el aprovisionamiento:
+
+* [Script de aprovisionamiento](https://github.com/manuelbr/Proyecto_CC/tree/master/provision/script.yml)
 
 # Actualizaciones
 
@@ -62,4 +99,5 @@ proyecto, más concretamente [Aquí](https://manuelbr.github.io/Proyecto_CC/).
 - [x] Actualizados los microservicios a implementar (a día 18/11/2016).
 - [x] Inclusión de la documentación que hace referencia al aprovisionamiento de la nube a usar. (a día 18/11/2016).
 - [x] Eliminación del material sobrante del documento README. (a día 20/11/2016).
+- [x] Inclusión del tutorial de uso de ansible en el documento README. (a día 21/11/2016).
 
