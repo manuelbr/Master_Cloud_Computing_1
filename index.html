@@ -34,52 +34,6 @@
 
 <p>Una breve introducción al proyecto puede leerse <a href="https://github.com/manuelbr/Proyecto_CC/blob/master/README.md">aquí</a></p>
 
-<h1>
-<a id="aprovisionamiento" class="anchor" href="#aprovisionamiento" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Guia de instalación y funcionamiento de ansible con la máquina virtual</h1>
-        
-<p>Lo primero de todo es la instalación de ansible en local, por ejemplo usando apt-get en ubuntu con la siguiente lista de órdenes:</p>
-
-<ul>
-	<li><p>$ sudo apt-get install software-properties-common</p></li>
-	<li><p>$ sudo apt-add-repository ppa:ansible/ansible</p></li>
- 	<li><p>$ sudo apt-get update</p></li>
- 	<li><p>$ sudo apt-get install ansible</p></li>
-</ul>
-
-<p>Ahora, es el momento de configurarlo modificando el archivo /etc/ansible/hosts y añadiendo la final
-las siguientes dos líneas que definirán el host sobre el que se aprovisionará:</p> 
-
-<ul>
-	<li><p>[hosts]</p></li>
-	<li><p>host1 ansible_ssh_host=8.43.87.66</p></li>
-</ul>
- 
-<p>Tras ésto, se debe crear una carpeta llamada "group_vars" que contenga un único archivo llamado "hosts" (el nombre asignado al grupo de hosts en el fichero descrito anteriormente), que contenga
-las siguientes líneas:</p>
-
-
-<ul>
-	<li><p>---</p></li>
-	<li><p>ansible_ssh_user: ubuntu</p></li>
-</ul>
- 
-<p>El significado de estas dos líneas es decidir el nombre de usuario que utilizará ssh para autenticarse
-dentro del host establecido. Este nombre será "ubuntu" porque es el que asigna por defecto openstack a las máquinas con esta distribución. Ahora, ya se puede ejecutar el script en la máquina host con la
-siguiente orden:</p>
-
-<p>ansible-playbook -i (Directorio donde está el fichero hosts: /etc/ansible/hosts) (Directorio donde se encuentre el script.yml) --private-key (Directorio donde se encuentre el archivo ".pem" con la clave privada a utilizar en la autenticación via ssh).</p>
-
-<p>Los recursos necesarios para realizar con éxito este comando son los siguientes:</p>
-
-<ul>
-	<li><a href="https://github.com/manuelbr/Proyecto_CC/tree/master/provision/script.yml">Script de aprovisionamiento</a></li>
-	<li><a href="https://github.com/manuelbr/Proyecto_CC/tree/master/provision/key.pem">Clave privada de acceso a la nube</a></li>
-</ul>
-
-<p>De cara a probar el fichero de aprovisionamiento, se proporciona la ip actual a utilizar como host de ansible: 8.43.87.66. Dado que las máquinas son eliminadas por TryStack veinticuatro horas después de su creación, lo mismo les ocurre a las ip flotantes que tienen asignadas. Por ello, ansible debe ser configurado cuando se vuelve a crear una nueva instancia con una nueva ip, sustituyéndola por la anterior que se encuentra en el fichero: /etc/ansible/hosts, asociada al host que define a la instancia. En caso de que cuando se pruebe este fichero de aprovisionamiento ansible de avisos de que el host es 
-"unreacheable", avisame y te proporcionaré la última ip válida de la última instancia creada.</p>
-
-
 	</section>
 
         <aside id="sidebar">
