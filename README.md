@@ -55,13 +55,20 @@ Una guía detallada de cómo realizar este aprovisionamiento puede visitarse en 
 proyecto, más concretamente [Aquí](https://manuelbr.github.io/Proyecto_CC/).
 
 ##Guia de instalación y funcionamiento de ansible con la máquina virtual
-        
-Lo primero de todo es la instalación de ansible en local, por ejemplo usando apt-get en ubuntu con la siguiente lista de órdenes:
+      
+Tal y como se ha dicho antes, ansible funciona con la versión 2.7 de Python, por lo que el primer paso es instalarlo en la máquina donde se hará
+el aprovisionamiento, por ejemplo usando apt-get en ubuntu utilizando las siguientes ordenes por línea de comandos:
 
-* $ sudo apt-get install software-properties-common
-* $ sudo apt-add-repository ppa:ansible/ansible
-* $ sudo apt-get update
-* $ sudo apt-get install ansible
+* sudo add-apt-repository ppa:fkrull/deadsnakes
+* sudo apt-get update
+* sudo apt-get install python2.7
+  
+Tras esto, llega el momento de instalar ansible en local, por ejemplo usando apt-get en ubuntu con la siguiente lista de órdenes:
+
+* sudo apt-get install software-properties-common
+* sudo apt-add-repository ppa:ansible/ansible
+* sudo apt-get update
+* sudo apt-get install ansible
 
 
 Ahora, es el momento de configurarlo modificando el archivo /etc/ansible/hosts y añadiendo al final
