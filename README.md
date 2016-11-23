@@ -47,12 +47,9 @@ Las herramientas que están preparadas para instalarse como aprovisionamiento en
 - [x] El módulo Php que requiere Apache2 para poder funcionar.
 - [x] MySql server para poder alojar la base de datos en comunión con Apache2.
 - [x] RabbitMQ para poder tener el microservicio de gestión de colas de peticiones.
-- [x] GitHub para la gestión de versiones del proyecto.
+- [x] Git para la gestión de versiones del proyecto.
 
 Además de ello, en el script se realizan otras tareas como: la configuración del DNS de la máquina host, ya que por defecto openstack no la configura y la puesta en marcha de apache2 una vez instalado.
-
-Una guía detallada de cómo realizar este aprovisionamiento puede visitarse en la rama gh-pages de este
-proyecto, más concretamente [Aquí](https://manuelbr.github.io/Proyecto_CC/).
 
 ##Guia de instalación y funcionamiento de ansible con la máquina virtual
       
