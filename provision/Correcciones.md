@@ -27,7 +27,7 @@ instalarlo por partes.
 ## Documentación
 
 En esta imagen se puede observar el error anteriormente comentado:
-![alt text](https://github.com/manuelbr/Proyecto_CC/blob/master/provision/imagenesCorrecciones/error.png "Imagen Correccion 1")
+![alt text](https://github.com/jose999/Proyecto_CC/blob/master/provision/imagenesCorrecciones/error.png "Imagen Correccion 1")
 
 En esta otra se puede ver como el se provisiona correactamente:
-![alt text](https://github.com/manuelbr/Proyecto_CC/blob/master/provision/imagenesCorrecciones/instalacion.png "Imagen Correccion 2")
+![alt text](https://github.com/jose999/Proyecto_CC/blob/master/provision/imagenesCorrecciones/instalacion.png "Imagen Correccion 2")
