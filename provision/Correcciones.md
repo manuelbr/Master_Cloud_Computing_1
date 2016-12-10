@@ -1,4 +1,4 @@
-## Correcciones del script de Manuel Blanco Rienda 
+## Correcciones del script de Manuel Blanco Rienda
 
 ## Nombre del alumno:
 José Luis Fernández Aguilera
@@ -13,3 +13,21 @@ El script realiza muchas tareas y en algunos ámbitos es bueno, pero dependiendo
 
 En el siguiente enlace se puede observar la captura de pantalla de la ejecución del script en una máquina virtual Ubuntu14 en los servidores de trystack.
 [Captura de pantalla](https://raw.githubusercontent.com/okynos/ProyectoCC/gh-pages/images/capturaManuel.png)
+
+## Nombre del alumno:
+José Manuel Moya Baena (jose999)
+
+## Errores encontrados:
+No se encontro ningun erro, pero si que se mostraba un warning en la ejecucion advirtiendo de que el metodo estaba "deprecated". Se ha subsanado en el codigo.
+
+## Opinión:
+Al igual que el anterior compañero, opino que estaria mejor divir los distintos servicios en distintos archivos de provisionamiento permitiendo asi
+instalarlo por partes.
+
+## Documentación
+
+En esta imagen se puede observar el error anteriormente comentado:
+![alt text](https://github.com/jose999/Proyecto_CC/blob/master/provision/imagenesCorrecciones/error.png "Imagen Correccion 1")
+
+En esta otra se puede ver como el se provisiona correactamente:
+![alt text](https://github.com/jose999/Proyecto_CC/blob/master/provision/imagenesCorrecciones/instalacion.png "Imagen Correccion 2")
