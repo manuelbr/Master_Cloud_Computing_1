@@ -136,7 +136,7 @@ Con ello le estaremos diciendo a vagrant donde coger la imagen a montar en la m�
 
 * vagrant up
 
-Tal y como puede verse en la [captura](), se levanta la máquina virtual definida, se configura ssh como método de acceso a ella y por último se ejecuta el playbook que aprovisionará la máquina.
+Tal y como puede verse en la [captura](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_2.png), se levanta la máquina virtual definida, se configura ssh como método de acceso a ella y por último se ejecuta el playbook que aprovisionará la máquina.
 
 ##Guia de instalación y uso de vagrant en ejecución con OpenStack
 
@@ -181,11 +181,11 @@ Vagrant.configure('2') do |config|
 end
 ```
 
-Los campos relativos al acceso de la api de TryStack pueden rellenarse con la información que se ofrece en la opción "Ver credenciales" de la pestaña "Acceso a la API", que se encuentra en la sección "Acceso y Seguridad" de la pestaña "Compute", tal y como puede verse en la siguiente [imagen](). Ahora, y tal y como se hizo en el caso anterior, se debe colocar el script de aprovisionamiento a usar, en el mismo directorio que este "Vagrantfile" y usando la siguiente orden se conectará a Trystack, se creará la instancia con las especificaciones que determinamos y se aprovisionará la máquina:
+Los campos relativos al acceso de la api de TryStack pueden rellenarse con la información que se ofrece en la opción "Ver credenciales" de la pestaña "Acceso a la API", que se encuentra en la sección "Acceso y Seguridad" de la pestaña "Compute", tal y como puede verse en la siguiente [imagen](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_7.png). Ahora, y tal y como se hizo en el caso anterior, se debe colocar el script de aprovisionamiento a usar, en el mismo directorio que este "Vagrantfile" y usando la siguiente orden se conectará a Trystack, se creará la instancia con las especificaciones que determinamos y se aprovisionará la máquina:
 
 * sudo vagrant up
 
-Como muestra de lo que se debe obtener por pantalla se muestra la siguiente [captura]().
+Como muestra de lo que se debe obtener por pantalla se muestra la siguiente [captura](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_6.png).
 
 En caso de querer probar de forma reiterada el Vagrantfile, será necesario eliminar la configuración que vagrant ha establecido para la anterior máquina con el siguiente comando, y después hacer "vagrant up":
 
@@ -202,4 +202,5 @@ En caso de querer probar de forma reiterada el Vagrantfile, será necesario elim
 - [x] Inclusión de la documentación que hace referencia al aprovisionamiento de la nube a usar. (a día 18/11/2016).
 - [x] Eliminación del material sobrante del documento README. (a día 20/11/2016).
 - [x] Inclusión del tutorial de uso de ansible en el documento README. (a día 21/11/2016).
+- [x] Inclusión del tutorial de uso de vagrant con TryStack en el documento README. (a día 10/12/2016).
 
