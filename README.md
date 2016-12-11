@@ -125,22 +125,11 @@ por
 
 * config.vm.box = "ubuntu/trusty64"
 
-Añadimos justo debajo de esa línea, las siguientes:
-
-```
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "Nombre del script que provisionará la instancia"
-    ansible.verbose = "v"
-    ansible.limit = "all"
-    ansible.raw_arguments = ["-i(ip),"]
-  end
-```
-
 Con ello le estaremos diciendo a vagrant donde coger la imagen a montar en la máquina virtual y configurar ansible como método de provisionamiento para la máquina que hemos creado. En mi caso, el nombre del script de aprovisionamiento que desarrollé para el anterior hito se llamaba "script.yml", cambiar ese nombre por el que tiene el script de ansible (playbook) que deseamos usar como provisionador (El script debe estar en el mismo directorio que hemos creado). Ahora ya podemos levantar la máquina virtual usando el comando:
 
 * vagrant up
 
-Tal y como puede verse en la [captura](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_2.png), se levanta la máquina virtual definida, se configura ssh como método de acceso a ella y por último se ejecuta el playbook que aprovisionará la máquina.
+Tal y como puede verse en la [captura](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_2.png), se levanta la máquina virtual definida y se configura ssh como método de acceso a ella. Se omite el provisionamiento, ya que es innecesario hacerlo en local y se realizará con las instancias en la nube a continuación.
 
 ##Guia de instalación y uso de vagrant en ejecución con una instancia de TryStack
 
@@ -153,7 +142,7 @@ El proceso para el provisionamiento es similiar al seguido en el apartado anteri
 * cd (Directorio donde se quiere crear la máquina)
 * mkdir nombre-del-directorio
 * cd nombre-del-directorio
-* vagrant init
+* vagrant init 
 
 La máquina instanciada a través de Vagrant puede obtener una ip flotante pública de forma automática si Trystack no tiene ninguna creada. Sin embargo en este caso es necesario crearla primero en Trystack y asociarla directamente en el código de nuestro Vagrantfile, ya que es necesario saber de antemano la ip para poder dársela a ansible, de cara a poder provisionar la máquina creada.Modificamos ahora el archivo "Vagrantfile" creado para que conecte con nuestras credenciales a Openstack siguiendo la siguiente estructura:
 
