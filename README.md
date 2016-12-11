@@ -131,6 +131,10 @@ Con ello le estaremos diciendo a vagrant donde coger la imagen a montar en la m�
 
 Tal y como puede verse en la [captura](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_2.png), se levanta la máquina virtual definida y se configura ssh como método de acceso a ella. Se omite el provisionamiento, ya que es innecesario hacerlo en local y se realizará con las instancias en la nube a continuación.
 
+A continuación se proporciona el enlace donde pueden ser encontrado el archivo anteriormente descrito:
+
+* [Vagrantfile que provisiona una instancia en local](https://github.com/manuelbr/Proyecto_CC/blob/master/orquestacion/Vagrantfile_local)
+
 ##Orquestación y provisión de una instancia de TryStack
 
 A continuación se probará a utilizar vagrant para aprovisionar una máquina virtual alojada en la nube. En este caso, y tal y como se hizo en el hito anterior, se utilizará TryStack (la versión de prueba de Openstack) como proveedor de instancias virtuales. Antes de comenzar es necesario clarificar que será necesaria la versión 1.8.7 de Vagrant (que puede ser descargada de [aquí](https://releases.hashicorp.com/vagrant/1.8.7/)) para que el trabajo junto a TryStack pueda llevarse a cabo. Una vez se instalado el paquete .deb que contiene la mencionada versión, ya podemos instalar el plugin de openstack necesario para conectar con él, usando la siguiente orden:
@@ -194,6 +198,10 @@ En caso de querer probar de forma reiterada el Vagrantfile, será necesario elim
 
 * rm -R .vagrant/
 
+A continuación se proporciona el enlace donde pueden ser encontrado el archivo anteriormente descrito:
+
+* [Vagrantfile que provisiona una instancia en la nube](https://github.com/manuelbr/Proyecto_CC/blob/master/orquestacion/Vagrantfile_nube)
+
 ##Orquestación y provisión de varias instancias de TryStack
 
 Dado que Trystack no permite la creación de más de una ip flotante, me ha sido imposible probar el provisionamiento de varias instancias en él. Sin embargo, si se utilizara otro servicio de proporción de máquinas virtuales, el proceso sería igual que el descrito en la anterior sección, pero cambiando el vagrantfile para que siguiera la siguiente arquitectura:
@@ -244,12 +252,9 @@ Vagrant.configure('2') do |config|
 end
 ```
 
-A continuación se proporcionan los enlaces donde pueden ser encontrados los archivos anteriormente descritos:
+A continuación se proporciona el enlace donde pueden ser encontrado el archivo anteriormente descrito:
 
-* [Vagrantfile que provisiona una instancia en la nube](https://github.com/manuelbr/Proyecto_CC/blob/master/orquestacion/Vagrantfile_nube)
 * [Vagrantfile que provisiona varias instancias en la nube](https://github.com/manuelbr/Proyecto_CC/blob/master/orquestacion/Vagrantfile_multiple)
-* [Vagrantfile que provisiona una instancia en local](https://github.com/manuelbr/Proyecto_CC/blob/master/orquestacion/Vagrantfile_local)
-
 
 # Actualizaciones
 
