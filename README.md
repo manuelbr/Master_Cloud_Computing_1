@@ -215,6 +215,10 @@ maquinas=[
   {
     :hostname => "maquina2",
     :ip => ip flotante de la máquina 2,
+  },
+  {
+    :hostname => "maquina3",
+    :ip => ip flotante de la máquina 3,
   }
 ]
 
@@ -247,7 +251,7 @@ Vagrant.configure('2') do |config|
     ansible.playbook = "script.yml"
     ansible.verbose = "v"
     ansible.limit = "all"
-    ansible.raw_arguments = ["-i"+maquinas[0][:ip]+","+maquinas[1][:ip]+","]
+    ansible.raw_arguments = ["-i"+maquinas[0][:ip]+","+maquinas[1][:ip]+","+maquinas[2][:ip]+","]
   end
 end
 ```
