@@ -127,10 +127,14 @@ por
 
 Añadimos justo debajo de esa línea, las siguientes:
 
-* config.vm.provision "ansible" do |ansible|
-*   ansible.verbose = "v"
-*   ansible.playbook = "script.yml"
-* end 
+```
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "Nombre del script que provisionará la instancia"
+    ansible.verbose = "v"
+    ansible.limit = "all"
+    ansible.raw_arguments = ["-i(ip),"]
+  end
+```
 
 Con ello le estaremos diciendo a vagrant donde coger la imagen a montar en la máquina virtual y configurar ansible como método de provisionamiento para la máquina que hemos creado. En mi caso, el nombre del script de aprovisionamiento que desarrollé para el anterior hito se llamaba "script.yml", cambiar ese nombre por el que tiene el script de ansible (playbook) que deseamos usar como provisionador (El script debe estar en el mismo directorio que hemos creado). Ahora ya podemos levantar la máquina virtual usando el comando:
 
@@ -138,7 +142,7 @@ Con ello le estaremos diciendo a vagrant donde coger la imagen a montar en la m�
 
 Tal y como puede verse en la [captura](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_2.png), se levanta la máquina virtual definida, se configura ssh como método de acceso a ella y por último se ejecuta el playbook que aprovisionará la máquina.
 
-##Guia de instalación y uso de vagrant en ejecución con OpenStack
+##Guia de instalación y uso de vagrant en ejecución con una instancia de TryStack
 
 A continuación se probará a utilizar vagrant para aprovisionar una máquina virtual alojada en la nube. En este caso, y tal y como se hizo en el hito anterior, se utilizará TryStack (la versión de prueba de Openstack) como proveedor de instancias virtuales. Antes de comenzar es necesario clarificar que será necesaria la versión 1.8.7 de Vagrant (que puede ser descargada de [aquí](https://releases.hashicorp.com/vagrant/1.8.7/)) para que el trabajo junto a TryStack pueda llevarse a cabo. Una vez se instalado el paquete .deb que contiene la mencionada versión, ya podemos instalar el plugin de openstack necesario para conectar con él, usando la siguiente orden:
 
@@ -151,7 +155,7 @@ El proceso para el provisionamiento es similiar al seguido en el apartado anteri
 * cd nombre-del-directorio
 * vagrant init
 
-Modificamos ahora el archivo "Vagrantfile" creado para que conecte con nuestras credenciales a Openstack siguiendo la siguiente estructura:
+La máquina instanciada a través de Vagrant puede obtener una ip flotante pública de forma automática si Trystack no tiene ninguna creada. Sin embargo en este caso es necesario crearla primero en Trystack y asociarla directamente en el código de nuestro Vagrantfile, ya que es necesario saber de antemano la ip para poder dársela a ansible, de cara a poder provisionar la máquina creada.Modificamos ahora el archivo "Vagrantfile" creado para que conecte con nuestras credenciales a Openstack siguiendo la siguiente estructura:
 
 ```
 Vagrant.configure('2') do |config|
@@ -168,29 +172,88 @@ Vagrant.configure('2') do |config|
     os.server_name = "Nombre que seamos que tenga la instancia a crear"
     os.flavor = "Nombre asociado al tamaño deseado para la instancia"
     os.image = "Nombre de la imagen que cargará la instancia"
-    os.floating_ip_pool = "public"
+    os.floating_ip = la ip asignada a la máquina creada
+    os.floating_ip_pool = Nombre del pool creado en las redes de Trystack
     os.networks = "Nombre del grupo de redes que usará la instancia"
     os.keypair_name = "Nombre del par de claves pública-privada con el que se accederá a la instancia"
     os.security_groups = ["Nombre del grupo de seguridad que usará la instancia"]
   end
 
-  config.vm.provision "ansible" do |op|
-    op.verbose = "v"	
-    op.playbook = "Nombre del script que provisionará la instancia"
-  end 	
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "Nombre del script que provisionará la instancia"
+    ansible.verbose = "v"
+    ansible.limit = "all"
+    ansible.raw_arguments = ["-i(ip),"]
+  end
 end
 ```
 
-Los campos relativos al acceso de la api de TryStack pueden rellenarse con la información que se ofrece en la opción "Ver credenciales" de la pestaña "Acceso a la API", que se encuentra en la sección "Acceso y Seguridad" de la pestaña "Compute", tal y como puede verse en la siguiente [imagen](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_7.png). Ahora, y tal y como se hizo en el caso anterior, se debe colocar el script de aprovisionamiento a usar, en el mismo directorio que este "Vagrantfile" y usando la siguiente orden se conectará a Trystack, se creará la instancia con las especificaciones que determinamos y se aprovisionará la máquina:
+Hay que destacar que en la opción "raw_arguments" se le pasa la opción "-i" seguida de la ip de la máquina creada. Los campos relativos al acceso de la api de TryStack pueden rellenarse con la información que se ofrece en la opción "Ver credenciales" de la pestaña "Acceso a la API", que se encuentra en la sección "Acceso y Seguridad" de la pestaña "Compute", tal y como puede verse en la siguiente [imagen](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_7.png). Ahora, y tal y como se hizo en el caso anterior, se debe colocar el script de aprovisionamiento a usar, en el mismo directorio que este "Vagrantfile". Además, debe crearse otro archivo llamado "ansible.cfg" (en el mismo directorio que el Vagrantfile y el script de provisionamiento) que contendrá la ubicación de la clave pública de acceso a la instancia creada, siguiendo la siguiente arquitectura: 
+
+```
+[defaults]
+private_key_file = directorio donde se encuentra la clave primaria
+```
+
+Además, es necesario que el campo "hosts" del script de provisionamiento esté con valor "all", dado que le pasaremos la ip donde provisionar desde Vagrant, sin tener que modificar el archivo hosts local de la instalación de ansible. Usando la siguiente orden se conectará a Trystack, se creará la instancia con las especificaciones que determinamos y se aprovisionará la máquina:
 
 * sudo vagrant up
 
-Como muestra de lo que se debe obtener por pantalla se muestra la siguiente [captura](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_6.png).
+Como muestra de lo que se debe obtener por pantalla se muestra las siguientes [captura 1](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_6.png) y [captura 2](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito3_8.png)
 
 En caso de querer probar de forma reiterada el Vagrantfile, será necesario eliminar la configuración que vagrant ha establecido para la anterior máquina con el siguiente comando, y después hacer "vagrant up":
 
 * rm -R .vagrant/
 
+##Ejecución con varias instancias de TryStack
+
+Dado que Trystack no permite la creación de más de una ip flotante, me ha sido imposible probar el provisionamiento de varias instancias en él. Sin embargo, si se utilizara otro servicio de proporción de máquinas virtuales, el proceso sería igual que el descrito en la anterior sección, pero cambiando el vagrantfile para que siguiera la siguiente arquitectura:
+
+```
+maquinas=[
+  {
+    :hostname => "maquina1",
+    :ip => ip flotante de la máquina 1,
+  },
+  {
+    :hostname => "maquina2",
+    :ip => ip flotante de la máquina 2,
+  }
+]
+
+Vagrant.configure('2') do |config|
+  config.ssh.username = "Nombre de usuario usado para conectar vía ssh"
+  config.ssh.private_key_path = "Directorio donde está la clave privada"
+
+  maquinas.each do |maquina|
+	config.vm.define maquina[:hostname] do |node|
+   		config.vm.provider "openstack" do |os|
+    			 os.openstack_auth_url = "Url de autenticación/tokens"
+    			 os.username = "Nombre de usuario"
+    			 os.password = "Contraseña de acceso a la API de TryStack"
+    			 os.tenant_name = "Nombre del proyecto dentro de TryStack"	
+
+    			#Datos de la instancia a crear	
+    			os.server_name = "Nombre que seamos que tenga la instancia a crear"
+    			os.flavor = "Nombre asociado al tamaño deseado para la instancia"
+    			os.image = "Nombre de la imagen que cargará la instancia"
+    			os.floating_ip = maquina[:ip]
+    			os.floating_ip_pool = Nombre del pool creado en las redes de Trystack
+    			os.networks = "Nombre del grupo de redes que usará la instancia"
+    			os.keypair_name = "Nombre del par de claves pública-privada con el que se accederá a la instancia"
+    			os.security_groups = ["Nombre del grupo de seguridad que usará la instancia"]
+  		end
+	end
+  end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "script.yml"
+    ansible.verbose = "v"
+    ansible.limit = "all"
+    ansible.raw_arguments = ["-i"+maquinas[0][:ip]+","+maquinas[1][:ip]+","]
+  end
+end
+```
 
 # Actualizaciones
 
@@ -203,4 +266,5 @@ En caso de querer probar de forma reiterada el Vagrantfile, será necesario elim
 - [x] Eliminación del material sobrante del documento README. (a día 20/11/2016).
 - [x] Inclusión del tutorial de uso de ansible en el documento README. (a día 21/11/2016).
 - [x] Inclusión del tutorial de uso de vagrant con TryStack en el documento README. (a día 10/12/2016).
+- [x] Actualización del tutorial de uso de vagrant con TryStack en el documento README. (a día 11/12/2016).
 
