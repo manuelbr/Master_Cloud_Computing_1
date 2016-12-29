@@ -260,6 +260,86 @@ A continuación se proporciona el enlace donde pueden ser encontrado el archivo 
 
 * [Vagrantfile que provisiona varias instancias en la nube](https://github.com/manuelbr/Proyecto_CC/blob/master/orquestacion/Vagrantfile_multiple)
 
+
+##Instalación y orquestación de contenedores con Docker (en local)
+
+Lo primero de todo es la instalación de docker, que se puede realizar siguiendo la siguiente lista de comandos (usando apt-get en ubuntu):
+
+```
+sudo apt-get update
+sudo apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
+sudo apt-get update
+sudo apt-get install -y docker-engine
+```
+
+Con los anteriores comandos se actualizan los repositorios, se instalan las cabeceras de linux necesarias para la virtualización que usa docker, se añade la clave de repositorios de docker, el propio repositorio y por último se instala docker engine. Tras ésto, podemos comenzar a desarrollar nuestro dockerfile para la creación de un contenedor que tenga todo lo necesario para realizar las pruebas a nuestros microservicios. Dado que son varios los microservicios a implementar, lo mejor es crear un contenedor independiente para cada una de las herramientas a testear, con lo que nos quedan dos script con la siguiente estructura (Instalaremos git en los dos contenedores porque será una herramienta a utilizar en ambos):
+
+
+* Contenedor con apache2, mysql, php y git
+```
+FROM debian
+MAINTAINER (Nombre del que mantiene el contenedor) (Correo del que mantiene el contenedor)
+
+RUN apt-get update && apt-get install -y apache2 && apt-get install libapache2-mod-php5 && apt-get install mysql-server
+
+EXPOSE 80 (Se abre el puerto 80 para apache)
+
+ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"] (una vez realizado lo anterior, se ejecuta apache2 y se queda en segundo plano)
+```
+
+* Contenedor con RabbitMQ y git
+```
+FROM debian
+MAINTAINER (Nombre del que mantiene el contenedor) (Correo del que mantiene el contenedor)
+
+RUN apt-get update && apt-get install -y rabbitmq-server
+```
+
+Ambos script deben llamarse "Dockerfile", por lo que cada uno debe ir en un directorio diferente para que no se solapen. Para poder probar los anteriores contenedores en la nube (más concretamente en Azure), primero tenemos que subirlos a dock hub, de cara a poder descargarlos en las máquinas virtuales que creemos en la nube. Para ello nos crearemos una cuenta en docker y haremos "docker login", introduciendo los datos proporcionados en el registro (tal y como puede verse [aquí](hito4_9)). Una vez localizado en el directorio de uno de los script, pasamos a crear la imagen con el siguiente comando:
+
+```
+sudo docker build -t (Nombre de usuario en docker)/(Nombre elegido para la imagen):1.0 .
+```
+
+El anterior comando mostraría la siguiente salida: [salida1](hito4_1_1) y [salida2](hito4_2_1) para el primer script de apache, [salida2_1](hito4_1_3) y [salida2_2](hito4_1_4) para el segundo de RabbitMQ. El siguiente paso es crear el contenedor asociado a esta imagen, utilizando el siguiente comando:
+
+```
+sudo docker run --name (nombre del contenedor) (Nombre de usuario en docker)/(Nombre de la imagen):1.0
+``` 
+
+A continuación, se muestra la salida que debe obtenerse con el comando anterior (incluyendo la comprobación de que el contenedor se ha cargado con: sudo docker ps): [salida3](hito4_3). 
+
+##Orquestación de contenedores con Docker en Azure
+Procedemos a subir nuestros contenedores con el siguiente comando:
+
+```
+sudo docker push (Nombre de usuario en docker)/(Nombre de la imagen)
+```
+
+En la siguiente captura puede verse la salida que debemos obtener: [salida4](hito4_10). Ahora es el momento de crear la máquina virtual en nuestro proveedor (Azure) usando docker, desde línea de comandos. Para ello, debemos instalar "docker-machine" con las siguientes órdenes:
+
+```
+curl -L https://github.com/docker/machine/releases/download/v0.8.2/docker-machine-`uname -s`-`uname -m` >Escritorio/docker-machine
+sudo cp Escritorio/docker-machine /usr/local/bin/docker-machine
+sudo chmod +x /usr/local/bin/docker-machine
+``` 
+
+Para poder conectar con nuestra cuenta de Azure, primero debemos instalar el "cli" de Azure con el comando: "sudo npm install -g azure-cli", habiendo instalado previamente el gestor npm. Ahora, ya podemos crear una máquina virtual (en mi ejemplo con debian 8) en nuestra cuenta de Azure utilizando la siguiente sintaxis de comando:
+
+```
+sudo docker-machine create  --driver azure  --azure-image "credativ:Debian:8:latest"  --azure-location "southcentralus"  --azure-resource-group "grupo-debian"  --azure-size "Standard_D1_v2"  --azure-ssh-user (Nombre de usuario que accederá vía ssh)  --azure-subscription-id ("id de suscripción de la cuenta de Azure") --engine-label "data-host=true"  (Nombre de la máquina virtual que se va a crear).
+```
+
+Se nos pedirá que hagamos login con nuestra cuenta de Azure, tras lo cuál obtendremos una salida como la siguiente: [salida5](hito4_7). Podemos observar que se ha creado y arrancado la susodicha máquina virtual en la siguiente captura: [salida6](hito4_8). Tras comprobar que la máquina en cuestión está activa, podemos descargar e instalar el contenedor que subimos anteriormente a los repositorios de docker, con el siguiente comando:
+
+```
+sudo docker-machine ssh (Nombre de la máquina virtual) sudo docker run -it (Nombre de usuario en docker)/(Nombre de la imagen):1.0
+```
+
+Si todo ha salido bien obtendremos la siguiente salida: [salida7](hito4_11). Podemos comprobar que, efectivamente se ha descargado e instalado el contenedor especificado con la orden: "sudo docker-machine ssh (Nombre de la máquina virtual) sudo docker ps", obteniendo la siguiente salida: [salida8](hito4_11). En mi caso, para el tutorial se ha utilizado el contenedor creado para contener apache2, mysql y php.
+
 # Actualizaciones
 
 - [x] Actualización de los objetivos de la segunda y tercera semana (a día 24/10/2016).  
@@ -272,4 +352,5 @@ A continuación se proporciona el enlace donde pueden ser encontrado el archivo 
 - [x] Inclusión del tutorial de uso de ansible en el documento README. (a día 21/11/2016).
 - [x] Inclusión del tutorial de uso de vagrant con TryStack en el documento README. (a día 10/12/2016).
 - [x] Actualización del tutorial de uso de vagrant con TryStack en el documento README. (a día 11/12/2016).
+- [x] Inclusión del tutorial de Docker en local y en Azure. (a día 29/12/2016).
 
