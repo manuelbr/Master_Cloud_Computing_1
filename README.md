@@ -282,7 +282,7 @@ Con los anteriores comandos se actualizan los repositorios, se instalan las cabe
 FROM debian
 MAINTAINER (Nombre del que mantiene el contenedor) (Correo del que mantiene el contenedor)
 
-RUN apt-get update && apt-get install -y apache2 && apt-get install libapache2-mod-php5 && apt-get install mysql-server
+RUN apt-get update && apt-get install -y apache2 && apt-get install libapache2-mod-php5 && apt-get install mysql-server && apt-get install git
 
 EXPOSE 80 (Se abre el puerto 80 para apache)
 
@@ -294,22 +294,22 @@ ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"] (una vez realizado lo an
 FROM debian
 MAINTAINER (Nombre del que mantiene el contenedor) (Correo del que mantiene el contenedor)
 
-RUN apt-get update && apt-get install -y rabbitmq-server
+RUN apt-get update && apt-get install -y rabbitmq-server && apt-get install git
 ```
 
-Ambos script deben llamarse "Dockerfile", por lo que cada uno debe ir en un directorio diferente para que no se solapen. Para poder probar los anteriores contenedores en la nube (más concretamente en Azure), primero tenemos que subirlos a dock hub, de cara a poder descargarlos en las máquinas virtuales que creemos en la nube. Para ello nos crearemos una cuenta en docker y haremos "docker login", introduciendo los datos proporcionados en el registro (tal y como puede verse [aquí](hito4_9)). Una vez localizado en el directorio de uno de los script, pasamos a crear la imagen con el siguiente comando:
+Ambos script deben llamarse "Dockerfile", por lo que cada uno debe ir en un directorio diferente para que no se solapen. Para poder probar los anteriores contenedores en la nube (más concretamente en Azure), primero tenemos que subirlos a dock hub, de cara a poder descargarlos en las máquinas virtuales que creemos en la nube. Para ello nos crearemos una cuenta en docker y haremos "docker login", introduciendo los datos proporcionados en el registro (tal y como puede verse [aquí](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_9.png)). Una vez localizado en el directorio de uno de los script, pasamos a crear la imagen con el siguiente comando:
 
 ```
 sudo docker build -t (Nombre de usuario en docker)/(Nombre elegido para la imagen):1.0 .
 ```
 
-El anterior comando mostraría la siguiente salida: [salida1](hito4_1_1) y [salida2](hito4_2_1) para el primer script de apache, [salida2_1](hito4_1_3) y [salida2_2](hito4_1_4) para el segundo de RabbitMQ. El siguiente paso es crear el contenedor asociado a esta imagen, utilizando el siguiente comando:
+El anterior comando mostraría la siguiente salida: [salida1](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_1.png) y [salida2](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_2.png) para el primer script de apache, [salida2_1](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_1_2.png) y [salida2_2](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_1_3.png) para el segundo de RabbitMQ. El siguiente paso es crear el contenedor asociado a esta imagen, utilizando el siguiente comando:
 
 ```
 sudo docker run --name (nombre del contenedor) (Nombre de usuario en docker)/(Nombre de la imagen):1.0
 ``` 
 
-A continuación, se muestra la salida que debe obtenerse con el comando anterior (incluyendo la comprobación de que el contenedor se ha cargado con: sudo docker ps): [salida3](hito4_3). 
+A continuación, se muestra la salida que debe obtenerse con el comando anterior: [salida3](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_3.png), y la comprobación de que el contenedor se ha cargado con: sudo docker ps: [salida3_1](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_3_1.png). 
 
 ##Orquestación de contenedores con Docker en Azure
 Procedemos a subir nuestros contenedores con el siguiente comando:
@@ -318,7 +318,7 @@ Procedemos a subir nuestros contenedores con el siguiente comando:
 sudo docker push (Nombre de usuario en docker)/(Nombre de la imagen)
 ```
 
-En la siguiente captura puede verse la salida que debemos obtener: [salida4](hito4_10). Ahora es el momento de crear la máquina virtual en nuestro proveedor (Azure) usando docker, desde línea de comandos. Para ello, debemos instalar "docker-machine" con las siguientes órdenes:
+En la siguiente captura puede verse la salida que debemos obtener: [salida4](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_10.png). Ahora es el momento de crear la máquina virtual en nuestro proveedor (Azure) usando docker, desde línea de comandos. Para ello, debemos instalar "docker-machine" con las siguientes órdenes:
 
 ```
 curl -L https://github.com/docker/machine/releases/download/v0.8.2/docker-machine-`uname -s`-`uname -m` >Escritorio/docker-machine
@@ -332,13 +332,13 @@ Para poder conectar con nuestra cuenta de Azure, primero debemos instalar el "cl
 sudo docker-machine create  --driver azure  --azure-image "credativ:Debian:8:latest"  --azure-location "southcentralus"  --azure-resource-group "grupo-debian"  --azure-size "Standard_D1_v2"  --azure-ssh-user (Nombre de usuario que accederá vía ssh)  --azure-subscription-id ("id de suscripción de la cuenta de Azure") --engine-label "data-host=true"  (Nombre de la máquina virtual que se va a crear).
 ```
 
-Se nos pedirá que hagamos login con nuestra cuenta de Azure, tras lo cuál obtendremos una salida como la siguiente: [salida5](hito4_7). Podemos observar que se ha creado y arrancado la susodicha máquina virtual en la siguiente captura: [salida6](hito4_8). Tras comprobar que la máquina en cuestión está activa, podemos descargar e instalar el contenedor que subimos anteriormente a los repositorios de docker, con el siguiente comando:
+Se nos pedirá que hagamos login con nuestra cuenta de Azure, tras lo cuál obtendremos una salida como la siguiente: [salida5](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_7.png). Podemos observar que se ha creado y arrancado la susodicha máquina virtual en la siguiente captura: [salida6](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_8.png). Tras comprobar que la máquina en cuestión está activa, podemos descargar e instalar el contenedor que subimos anteriormente a los repositorios de docker, con el siguiente comando:
 
 ```
 sudo docker-machine ssh (Nombre de la máquina virtual) sudo docker run -it (Nombre de usuario en docker)/(Nombre de la imagen):1.0
 ```
 
-Si todo ha salido bien obtendremos la siguiente salida: [salida7](hito4_11). Podemos comprobar que, efectivamente se ha descargado e instalado el contenedor especificado con la orden: "sudo docker-machine ssh (Nombre de la máquina virtual) sudo docker ps", obteniendo la siguiente salida: [salida8](hito4_11). En mi caso, para el tutorial se ha utilizado el contenedor creado para contener apache2, mysql y php.
+Si todo ha salido bien obtendremos la siguiente salida: [salida7](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_11.png). Podemos comprobar que, efectivamente se ha descargado e instalado el contenedor especificado con la orden: "sudo docker-machine ssh (Nombre de la máquina virtual) sudo docker ps", obteniendo la siguiente salida: [salida8](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_11_1.png). En mi caso, para el tutorial se ha utilizado el contenedor creado para contener apache2, mysql, php y git.
 
 # Actualizaciones
 
