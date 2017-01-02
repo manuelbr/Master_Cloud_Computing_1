@@ -282,7 +282,7 @@ Con los anteriores comandos se actualizan los repositorios, se instalan las cabe
 FROM debian
 MAINTAINER (Nombre del que mantiene el contenedor) (Correo del que mantiene el contenedor)
 
-RUN apt-get update && apt-get install -y apache2 && apt-get install libapache2-mod-php5 && apt-get install mysql-server && apt-get install git
+RUN apt-get update && apt-get install -y apache2 && apt-get install -y libapache2-mod-php5 && apt-get install -y mysql-server && apt-get install -y git
 
 EXPOSE 80 (Se abre el puerto 80 para apache)
 
@@ -294,7 +294,7 @@ ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"] (una vez realizado lo an
 FROM debian
 MAINTAINER (Nombre del que mantiene el contenedor) (Correo del que mantiene el contenedor)
 
-RUN apt-get update && apt-get install -y rabbitmq-server && apt-get install git
+RUN apt-get update && apt-get install -y rabbitmq-server && apt-get install -y git
 ```
 
 Ambos script deben llamarse "Dockerfile", por lo que cada uno debe ir en un directorio diferente para que no se solapen. Para poder probar los anteriores contenedores en la nube (más concretamente en Azure), primero tenemos que subirlos a dock hub, de cara a poder descargarlos en las máquinas virtuales que creemos en la nube. Para ello nos crearemos una cuenta en docker y haremos "docker login", introduciendo los datos proporcionados en el registro (tal y como puede verse [aquí](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_9.png)). Una vez localizado en el directorio de uno de los script, pasamos a crear la imagen con el siguiente comando:
