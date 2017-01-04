@@ -340,6 +340,8 @@ sudo docker-machine ssh (Nombre de la máquina virtual) sudo docker run -it (Nom
 
 Si todo ha salido bien obtendremos la siguiente salida: [salida7](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_11.png). Podemos comprobar que, efectivamente se ha descargado e instalado el contenedor especificado con la orden: "sudo docker-machine ssh (Nombre de la máquina virtual) sudo docker ps", obteniendo la siguiente salida: [salida8](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito4_11_1.png). En mi caso, para el tutorial se ha utilizado el contenedor creado para contener apache2, mysql, php y git.
 
+* Los dos script "Dockerfile" usados para el hito y este tutorial, pueden ser encontrados [aquí](https://github.com/manuelbr/Proyecto_CC/tree/master/contenedores).
+
 # Actualizaciones
 
 - [x] Actualización de los objetivos de la segunda y tercera semana (a día 24/10/2016).  
