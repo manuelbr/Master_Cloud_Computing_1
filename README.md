@@ -342,6 +342,51 @@ Si todo ha salido bien obtendremos la siguiente salida: [salida7](https://github
 
 * Los dos script "Dockerfile" usados para el hito y este tutorial, pueden ser encontrados [aquí](https://github.com/manuelbr/Proyecto_CC/tree/master/contenedores).
 
+
+##Hito final: Despliegue de microservicios 
+Para terminar con la asignatura, la realización del último hito consiste en el despliegue de todos los microservicios con los que se ha trabajado a lo largo de la asignatura desde una única herramienta, combinando su uso con otras que se han usado a lo largo del cuatrimestre, como son: docker para la orquestación de contenedores o ansible para el provisionamiento de máquinas virtuales. Sin embargo, lo primero de todo es decidir la forma y la estructura que tendrá el despliegue, es decir: cómo se organizarán las citadas herramientas para desplegar los microservicios necesarios.
+
+###Organización del despliegue
+¿Cuál debe ser la lógica que nos guie en cuanto a la organización en el despliegue de los microservicios? La respuesta a esta pregunta es el razonamiento puro. Los microservicios a desplegar hacen uso de las herramientas: Apache, php, mySql-server, rabbitMq y Git como sistema de control de versiones. RabbitMq es un servicio de encolado de peticiones que dado su encapsulamiento, puede instalarse en un contenedor ligero en el proveedor que utilizaremos en este hito: Azure, ya que una de las prioridades es minimizar la carga que le damos a nuestras máquinas virtuales alojadas en la nube, no solo por eficiencia sino por el coste que puede acarrearnos.Dado que Apache (en conjunción con php) se usa como servidor del contenido multimedia que se ve referenciado en las bases de datos de mySql-server, sería beneficioso para la arquitectura de microservicios el dividir estos dos en diferentes máquinas virtuales. Además, lo mejor sería incluir git en el despliegue de apache y php, ya que podríamos controlar las versiones de los web-services que alojaramos en el mencionado servidor. Todo ello nos dejaría la siguiente organización de despliegue:
+
+* Apache, php y Git en una máquina virtual.
+* Mysql-server en otra máquina virtual.
+* RabbitMq en un contenedor ligero en una máquina virtual. 
+
+###Realización del despliegue
+Lo primero de todo será aclarar que usaré vagrant como herramienta desde la que realizar todo el despliegue. Para comenzar, se debe instalar el plugin de azure para la citada herramienta con el comando (utilizando apt-get en ubuntu):
+
+```
+sudo vagrant plugin install vagrant-azure
+```
+
+Tras ello, lo siguiente es instalar el cli de Azure. Este se instala desde los repositorios de npm, por lo que será necesario instalar esta utilidad antes de ello. Para lograr esto, será necesario seguir las siguientes dos órdenes:
+
+```
+sudo apt-get install npm
+sudo npm install -g azure-cli
+```
+
+Para poder trabajar con mi cuenta de azure, paso a logearme con el siguiente comando (siguiendo las instrucciones de copiado de contraseña y logeo por navegador que obtendremos):
+
+```
+sudo azure login
+```
+
+Dado que cuando trabajamos con vagrant lo hicimos con trystack, será necesario generar lo necesario para conectar esta herramienta con Azure. Para ello, seguimos la siguiente secuencia de ordenes en ubuntu para generar los credenciales requeridos:
+
+```
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ~/.ssh/azurevagrant.key -out ~/.ssh/azurevagrant.key
+chmod 600 ~/.ssh/azurevagrant.key
+openssl x509 -inform pem -in ~/.ssh/azurevagrant.key -outform der -out ~/.ssh/azurevagrant.cer
+openssl x509 -inform der -in ~/.ssh/azurevagrant.cer -out ~/.ssh/azurevagrant.pem
+```
+
+Con el primero de los comandos y siguiendo la lista de pasos que se nos presenta, crearemos las claves necesarias, le daremos los permisos necesarios con el segundo comando y obtendremos un fichero .cer (con el tercer comando) que contendrá la clave pública. Será este fichero el que se suba a Azure, siguiendo la siguiente secuencia de pasos en su panel de control: Settings -> Management Certificates -> Upload Management Certificates. Con el cuarto comando crearemos un fichero .pem que almacenará la clave privada que será usada en nuestro Vagrantfile.
+
+
+
+
 # Actualizaciones
 
 - [x] Actualización de los objetivos de la segunda y tercera semana (a día 24/10/2016).  
