@@ -1,0 +1,34 @@
+---
+- hosts: apachehost
+  become: yes
+  remote_user: ubuntu
+
+  tasks:
+  - name: Actualizar los repositorios
+    apt: update_cache=yes
+
+  - name: Instalar Apache2
+    apt: 
+      update_cache: yes
+      name: apache2 
+      state: present
+
+  - name: Instalar PHP
+    apt: 
+      update_cache: yes
+      name: php7.0
+      state: present
+
+  - name: Instalar el módulo php
+    apt:
+      update_cache: yes
+      name: libapache2-mod-php7.0
+      state: present
+
+  - name: Arrancar Apache
+    service: name=apache2 state=running enabled=yes
+
+  - name: Instalar Git
+    apt: 
+      name: git
+      state: present

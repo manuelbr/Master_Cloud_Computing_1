@@ -1,0 +1,54 @@
+#Definición de las tres máquinas y sus parámetros
+maquinas=[
+  {
+    #Nombre de la máquina	
+    :nombre => "apachehost",
+    #Nombre del grupo al que pertenecerá
+    :grupo => "apachehost",
+    #Nombre del script de provisión que usará
+    :provision => "azure1.yml"
+  },
+  {
+    :nombre => "mysqlhost",
+    :grupo => "mysqlhost",
+    :provision => "azure2.yml"
+  },
+  {
+    :nombre => "rabbitMQhost",
+    :grupo => "rabbitMQhost",
+    :provision => "azure3.yml"
+  }
+]
+
+Vagrant.configure("2") do |config|
+  config.vm.box     = 'azure' #Box base que usa azure (vacía, a partir de la cuál se crearán las máquinas)
+  config.vm.box_url = 'https://github.com/msopentech/vagrant-azure/raw/master/dummy.box'	
+
+  config.ssh.username = "vagrant" #Nombre de usuario con el que accederemos a las máquinas	
+  config.ssh.private_key_path = '~/.ssh/id_rsa' #Ruta a la clave privada que definimos anteriormente
+
+  maquinas.each do |maquina|
+    	config.vm.define maquina[:nombre] do |node|
+		node.vm.hostname = "vagrant"	#host name de la máquina que creamos	
+		config.vm.provider :azure do |azure, override|
+    			azure.vm_name     = maquina[:nombre] 
+    			azure.vm_image_urn= 'canonical:UbuntuServer:16.04-LTS:16.04.201701130' #Nombre de la distribución que llevarán las máquinas: Ubuntu 16
+    			azure.vm_size     = 'Basic_A0' #Tamaño de la máquina virtual
+			azure.resource_group_name = maquina[:grupo]
+    			azure.location = 'westeurope' #Localización de los servidores de Azure donde estará la máquina.
+	
+			azure.tcp_endpoints = '80:80'
+			azure.tenant_id = "Tenant ID" 
+   			azure.client_id = "Client ID"
+    			azure.client_secret = "Client Secret"
+    			azure.subscription_id  = 'Subscription ID'
+  		end
+
+		config.vm.provision "ansible" do |ansible|
+       			ansible.sudo = true
+       			ansible.playbook = maquina[:provision]
+       			ansible.verbose = "v"
+  		end
+	end
+  end
+end

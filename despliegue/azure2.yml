@@ -1,0 +1,19 @@
+---
+- hosts: mysqlhost
+  become: yes
+  remote_user: ubuntu
+
+  tasks:
+  - name: Clean artifact path
+    file:
+      state: absent
+      path: /var/lib/apt/lists/lock
+
+  - name: Actualizar los repositorios
+    apt: update_cache=yes
+
+  - name: Instalar MySql server
+    apt: 
+      name: mysql-server
+      state: present
+

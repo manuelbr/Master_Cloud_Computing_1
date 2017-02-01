@@ -1,0 +1,27 @@
+---
+- hosts: rabbitMQhost
+  become: yes
+  remote_user: ubuntu
+
+  tasks:
+  - name: Actualizar los repositorios
+    apt: update_cache=yes
+
+  - name: Instalar docker.io
+    apt: 
+      name: docker.io
+      state: present
+
+  - name: Instalar pip
+    apt: 
+      name: python-pip
+      state: present
+
+  - pip:
+      name: docker-py
+
+  - name: Bajarse el container de Alpine+RabbitMQ
+    docker_container:
+       name: rabbit
+       image: maryville/rabbitmq
+       state: started
