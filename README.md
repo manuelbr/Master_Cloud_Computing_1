@@ -354,10 +354,10 @@ Para terminar con la asignatura, la realización del último hito consiste en el
 * RabbitMq en un contenedor ligero en una máquina virtual. 
 
 ###Realización del despliegue
-Lo primero de todo será aclarar que usaré vagrant como herramienta desde la que realizar todo el despliegue. Para comenzar, se debe instalar el plugin de azure para la citada herramienta con el comando (utilizando apt-get en ubuntu):
+Lo primero de todo será aclarar que usaré vagrant como herramienta desde la que realizar todo el despliegue. Para comenzar, se debe instalar el plugin de azure para la citada herramienta (versión 2.0.0 para Vagrant 1.9.1) con el comando (utilizando apt-get en ubuntu):
 
 ```
-sudo vagrant plugin install vagrant-azure
+vagrant plugin install vagrant-azure --plugin-version '2.0.0.pre1'
 ```
 
 Tras ello, lo siguiente es instalar el cli de Azure. Este se instala desde los repositorios de npm, por lo que será necesario instalar esta utilidad antes de ello. Para lograr esto, será necesario seguir las siguientes dos órdenes:
@@ -373,16 +373,82 @@ Para poder trabajar con mi cuenta de azure, paso a logearme con el siguiente com
 sudo azure login
 ```
 
-Dado que cuando trabajamos con vagrant lo hicimos con trystack, será necesario generar lo necesario para conectar esta herramienta con Azure. Para ello, seguimos la siguiente secuencia de ordenes en ubuntu para generar los credenciales requeridos:
+Dado que cuando trabajamos con vagrant lo hicimos con trystack, será necesario generar lo necesario para conectar esta herramienta con Azure. Para ello, seguimos la siguiente secuencia de pasos en el panel de cotrol de azure:
+
+* Accedemos a la pestaña "Azure Active Directory" > "Registro de Aplicaciones" > "Agregar", ya que necesitaremos definir una app a través de la cuál conectaremos con Vagrant con Azure.
+* Definimos la app con el nombre y la url que deseemos y la guardamos.
+* Vamos ahora a la pestaña "Suscripciones" > "Control de acceso IAM" > "Agregar", y seleccionamos como rol el de lector y como usuario, el nombre de la aplicación que definimos antes (aunque no aparezca como tal, si se especifica el nombre completo aparece).
+* Tras ello, debemos conseguir los datos: "Tenant ID", "Client ID", "Client Secret" y "Subscription ID", que serán necesarios para poder conectar con nuestra cuenta de azure desde Vagrant. Se pueden obtener estos datos fácilmente siguiendo el siguiente tutorial de Terraform para conectar con Azure: [Enlace](https://www.terraform.io/docs/providers/azurerm/). 
+
+También tendremos que crear un par de claves (privada y pública) que usaremos como método de autenticación con las máquinas que creemos en Azure. Para ello, las generamos con el siguiente comando (en ubuntu): "ssh-keygen -t rsa". Tras rellenar los campos que nos piden se obtendrá un fichero rsa con la clave privada y otro .pub, con la pública. Llegados a este punto, ya podemos definir el fichero Vagrantfile que tendrá la siguiente estructura según lo acordado más arriba:
 
 ```
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ~/.ssh/azurevagrant.key -out ~/.ssh/azurevagrant.key
-chmod 600 ~/.ssh/azurevagrant.key
-openssl x509 -inform pem -in ~/.ssh/azurevagrant.key -outform der -out ~/.ssh/azurevagrant.cer
-openssl x509 -inform der -in ~/.ssh/azurevagrant.cer -out ~/.ssh/azurevagrant.pem
+#Definición de las tres máquinas y sus parámetros
+maquinas=[
+  {
+    #Nombre de la máquina	
+    :nombre => "apachehost",
+    #Nombre del grupo al que pertenecerá
+    :grupo => "apachehost",
+    #Nombre del script de provisión que usará
+    :provision => "azure1.yml"
+  },
+  {
+    :nombre => "mysqlhost",
+    :grupo => "mysqlhost",
+    :provision => "azure2.yml"
+  },
+  {
+    :nombre => "rabbitMQhost",
+    :grupo => "rabbitMQhost",
+    :provision => "azure3.yml"
+  }
+]
+
+Vagrant.configure("2") do |config|
+  config.vm.box     = 'azure' #Box base que usa azure (vacía, a partir de la cuál se crearán las máquinas)
+  config.vm.box_url = 'https://github.com/msopentech/vagrant-azure/raw/master/dummy.box'	
+
+  config.ssh.username = "vagrant" #Nombre de usuario con el que accederemos a las máquinas	
+  config.ssh.private_key_path = '~/.ssh/id_rsa' #Ruta a la clave privada que definimos anteriormente
+
+  maquinas.each do |maquina|
+    	config.vm.define maquina[:nombre] do |node|
+		node.vm.hostname = "vagrant"	#host name de la máquina que creamos	
+		config.vm.provider :azure do |azure, override|
+    			azure.vm_name     = maquina[:nombre] 
+    			azure.vm_image_urn= 'canonical:UbuntuServer:16.04-LTS:16.04.201701130' #Nombre de la distribución que llevarán las máquinas: Ubuntu 16
+    			azure.vm_size     = 'Basic_A0' #Tamaño de la máquina virtual
+			azure.resource_group_name = maquina[:grupo]
+    			azure.location = 'westeurope' #Localización de los servidores de Azure donde estará la máquina.
+	
+			azure.tcp_endpoints = '80:80'
+			azure.tenant_id = "Tenant ID" 
+   			azure.client_id = "Client ID"
+    			azure.client_secret = "Client Secret"
+    			azure.subscription_id  = 'Subscription ID'
+  		end
+	end
+  end
+
+  maquinas.each do |maquina|
+    	config.vm.define maquina[:nombre] do |node|
+ 		config.vm.provision "ansible" do |ansible|
+       			ansible.sudo = true
+       			ansible.playbook = maquina[:provision]
+       			ansible.verbose = "v"
+  		end
+	end
+  end
+end
 ```
 
-Con el primero de los comandos y siguiendo la lista de pasos que se nos presenta, crearemos las claves necesarias, le daremos los permisos necesarios con el segundo comando y obtendremos un fichero .cer (con el tercer comando) que contendrá la clave pública. Será este fichero el que se suba a Azure, siguiendo la siguiente secuencia de pasos en su panel de control: Settings -> Management Certificates -> Upload Management Certificates. Con el cuarto comando crearemos un fichero .pem que almacenará la clave privada que será usada en nuestro Vagrantfile.
+Una vez creadas las máquinas virtuales, en el mismo Vagrantfile se procederá a provisionarlas de diferente manera, con un script de ansible diferente, en función de las necesidades de cada una: [Apache-PHP-Git](), [MySql-Server](), [Docker-RabbitMQ+Alpine](). En cada uno de estos playbooks de provisionamiento de ansible especificaremos el nombre de host que establecimos en el Vagrantfile con el parámetro "vm_name", para que sólo se ejecute cada script para la máquina para el que está diseñado.
+
+* El script azure1.yml provisiona apache, php, las librerías de php necesarias por Apache2 y git en la máquina "apachehost". Además se encarga de arrancar el servidor de Apache.
+* El script azure2.yml se encarga de provisionar mysql-server en la máquina "mysqlhost". Como apunte, decir que se elimina el fichero lock en la ruta "/var/lib/apt/lists/", porque da problemas con la instalación descrita en cuanto al bloqueo de los directorios donde debe alojarse mysql.
+* Por último, el script azure3.yml se encarga de levantar un contenedor muy ligero (apenas 35 Mb) con Alpine y RabbitMQ: [Enlace](https://hub.docker.com/r/maryville/rabbitmq/). Para lograrlo, instala docker en la máquina virtual, así como pip, que será necesario para poder instalar el módulo "docker-py" de cara a poder cargar el mencionado contenedor (hecho que se hace el último, dejándolo arrancado). 
+
 
 
 
