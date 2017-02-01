@@ -32,3 +32,25 @@
     apt: 
       name: git
       state: present
+ 
+  - name: Instalar curl para usar loggly
+    apt:
+      name: curl
+      state: present
+
+  - name: Instalar libcurl3
+    apt:
+      name: libcurl3
+      state: present
+
+  - name: Instalar libcurl3-dev
+    apt:
+      name: libcurl3-dev
+      state: present
+
+  - name: Instalar php-curl
+    apt:
+      name: php-curl
+      state: present
+ 
+
