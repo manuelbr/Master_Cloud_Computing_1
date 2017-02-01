@@ -380,7 +380,7 @@ Dado que cuando trabajamos con vagrant lo hicimos con trystack, será necesario 
 * Vamos ahora a la pestaña "Suscripciones" > "Control de acceso IAM" > "Agregar", y seleccionamos como rol el de lector y como usuario, el nombre de la aplicación que definimos antes (aunque no aparezca como tal, si se especifica el nombre completo aparece).
 * Tras ello, debemos conseguir los datos: "Tenant ID", "Client ID", "Client Secret" y "Subscription ID", que serán necesarios para poder conectar con nuestra cuenta de azure desde Vagrant. Se pueden obtener estos datos fácilmente siguiendo el siguiente tutorial de Terraform para conectar con Azure: [Enlace](https://www.terraform.io/docs/providers/azurerm/). 
 
-También tendremos que crear un par de claves (privada y pública) que usaremos como método de autenticación con las máquinas que creemos en Azure. Para ello, las generamos con el siguiente comando (en ubuntu): "ssh-keygen -t rsa". Tras rellenar los campos que nos piden se obtendrá un fichero rsa con la clave privada y otro .pub, con la pública. Llegados a este punto, ya podemos definir el fichero Vagrantfile que tendrá la siguiente estructura según lo acordado más arriba:
+También tendremos que crear un par de claves (privada y pública) que usaremos como método de autenticación con las máquinas que creemos en Azure. Para ello, las generamos con el siguiente comando (en ubuntu): "ssh-keygen -t rsa". Tras rellenar los campos que nos piden se obtendrá un fichero rsa con la clave privada y otro .pub, con la pública. Llegados a este punto, ya podemos definir el fichero [Vagrantfile](https://github.com/manuelbr/Proyecto_CC/blob/master/despliegue/Vagrantfile) que tendrá la siguiente estructura según lo acordado más arriba:
 
 ```
 #Definición de las tres máquinas y sus parámetros
@@ -428,12 +428,8 @@ Vagrant.configure("2") do |config|
     			azure.client_secret = "Client Secret"
     			azure.subscription_id  = 'Subscription ID'
   		end
-	end
-  end
 
-  maquinas.each do |maquina|
-    	config.vm.define maquina[:nombre] do |node|
- 		config.vm.provision "ansible" do |ansible|
+		config.vm.provision "ansible" do |ansible|
        			ansible.sudo = true
        			ansible.playbook = maquina[:provision]
        			ansible.verbose = "v"
@@ -443,13 +439,13 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-Una vez creadas las máquinas virtuales, en el mismo Vagrantfile se procederá a provisionarlas de diferente manera, con un script de ansible diferente, en función de las necesidades de cada una: [Apache-PHP-Git](), [MySql-Server](), [Docker-RabbitMQ+Alpine](). En cada uno de estos playbooks de provisionamiento de ansible especificaremos el nombre de host que establecimos en el Vagrantfile con el parámetro "vm_name", para que sólo se ejecute cada script para la máquina para el que está diseñado.
+Una vez creadas las máquinas virtuales, en el mismo Vagrantfile se procederá a provisionarlas de diferente manera, con un script de ansible diferente, en función de las necesidades de cada una: [Apache-PHP-Git](https://github.com/manuelbr/Proyecto_CC/blob/master/despliegue/azure1.yml), [MySql-Server](https://github.com/manuelbr/Proyecto_CC/blob/master/despliegue/azure2.yml), [Docker-RabbitMQ+Alpine](https://github.com/manuelbr/Proyecto_CC/blob/master/despliegue/azure3.yml). En cada uno de estos playbooks de provisionamiento de ansible especificaremos el nombre de host que establecimos en el Vagrantfile con el parámetro "vm_name", para que sólo se ejecute cada script para la máquina para el que está diseñado.
 
 * El script azure1.yml provisiona apache, php, las librerías de php necesarias por Apache2 y git en la máquina "apachehost". Además se encarga de arrancar el servidor de Apache.
 * El script azure2.yml se encarga de provisionar mysql-server en la máquina "mysqlhost". Como apunte, decir que se elimina el fichero lock en la ruta "/var/lib/apt/lists/", porque da problemas con la instalación descrita en cuanto al bloqueo de los directorios donde debe alojarse mysql.
 * Por último, el script azure3.yml se encarga de levantar un contenedor muy ligero (apenas 35 Mb) con Alpine y RabbitMQ: [Enlace](https://hub.docker.com/r/maryville/rabbitmq/). Para lograrlo, instala docker en la máquina virtual, así como pip, que será necesario para poder instalar el módulo "docker-py" de cara a poder cargar el mencionado contenedor (hecho que se hace el último, dejándolo arrancado). 
 
-
+Como apunte, antes de ejecutar el Vagrantfile, será necesario tener un fichero "ansible.cfg" (en el mismo directorio que el Vagrantfile y los archivos de provisión) como [este](https://github.com/manuelbr/Proyecto_CC/blob/master/despliegue/ansible.cfg), que tenga la ruta a la clave privada que generamos y que usará ansible para conectar con las máquinas definidas y defina el tamaño de las órdenes usadas por el propio ansible (ya que se pueden dar errores por cadenas muy largas). Ahora, ejecutando el comando: "sudo vagrant up --provider=azure", obtendremos la siguiente [salida](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito5_1.png), señal de que habrá comenzado el proceso de creación de las máquinas virtuales, mientras podremos observar salidas como: [salida2](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito5_2.png), [salida3](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito5_3.png), [salida4](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito5_4.png), [salida5](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito5_5.png), [salida6](https://github.com/manuelbr/Proyecto_CC/blob/gh-pages/images/hito5_6.png), en las que podemos ver cómo mientras algunas máquinas aún no se han creado, las que si lo han hecho comienzan a provisionarse de forma paralela. Tras terminar, podemos observar en el portal de azure cómo tenemos nuestras tres máquinas creadas con los parámetros especificados y provisionadas con el material necesario (tal y como hemos podido ver en las capturas de pantalla).
 
 
 
