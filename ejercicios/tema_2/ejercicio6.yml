@@ -1,0 +1,7 @@
+---
+- hosts: host1
+  sudo: yes
+
+  tasks:
+  - git: repo=https://github.com/slevin-by/simple_python_calculator.git dest=/srv/calculadora
+

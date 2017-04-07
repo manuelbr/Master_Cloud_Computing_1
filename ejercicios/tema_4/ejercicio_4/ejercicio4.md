@@ -1,0 +1,3 @@
+##Ejercicio 4: Instalar una imagen alternativa de Ubuntu y alguna adicional, por ejemplo de CentOS.
+
+Lo primero de todo es bajarnos el contenedor adecuado de ubuntu, en mi caso el que aparece nombrado como tal en los repositorios de docker con el comando: "sudo docker pull ubuntu" (obteniendo la siguiente salida: [captura 1](https://github.com/manuelbr/ejercicios_CC/blob/master/tema_4/ejercicio_4/imagenes/ej4_1.png)). A continuación ya podemos probar el contenedor que hemos instalado, viendo por ejemplo la estructura de directorios del home de ubuntu con la orden: "sudo docker run -it ubuntu ls". Obtenemos la siguiente salida: [captura 2](https://github.com/manuelbr/ejercicios_CC/blob/master/tema_4/ejercicio_4/imagenes/ej4_2.png).
